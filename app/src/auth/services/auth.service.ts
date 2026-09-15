@@ -13,7 +13,9 @@ export const AuthService = {
 
             return response.data;
         } catch (error: any) {
+            console.log("ERROR LOGIN COMPLETO:", error);
             if (axios.isAxiosError(error) && error.response) {
+                console.log("ERROR RESPONSE:", error.response.data);
                 throw new Error(error.response.data?.Message || "Error to login");
             }
             throw new Error("Server error");

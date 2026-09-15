@@ -9,3 +9,4 @@ export interface AdminProfile {
     avatarUrl: string;
     version: string;
 }
+

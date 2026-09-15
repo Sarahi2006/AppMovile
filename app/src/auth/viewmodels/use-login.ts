@@ -1,10 +1,11 @@
 import {useState} from "react";
 import {AuthService} from "@/app/src/Auth/services/auth.service";
 import {useRouter} from "expo-router";
+import {useAuth} from "@/app/src/context/AuthContext";
 
 export function useLogin(){
     const router = useRouter();
-
+    const {saveSession} = useAuth();
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [isLoading, setIsLoading] = useState(false)
@@ -26,8 +27,8 @@ export function useLogin(){
 
         try {
             const data = await AuthService.login(email, password)
-            console.log("TOKEN", data.token)
-            router.replace("/(protected)/dashboard")
+            console.log("TOKEN Bearer", data.token);
+            await saveSession(data.token,data.userResponse)
         } catch (error:any) {
             setErrorsMessage(error.message)
         }finally {

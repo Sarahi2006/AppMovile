@@ -10,10 +10,11 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useDrawer } from "../src/admin/viewmodels/use-drawer";
 import {Feather} from "@expo/vector-icons";
+import {useAuth} from "@/app/src/context/AuthContext";
 
 export default function ProtectedLayout() {
     const { profile, navigationOptions } = useDrawer();
-
+    const {clearSession}=useAuth()
     return (
         <GestureHandlerRootView>
             <Drawer
@@ -60,7 +61,7 @@ export default function ProtectedLayout() {
 
                                     return (
                                         <TouchableOpacity
-                                            style={[styles.menuItemList, isSelected && styles.menuItemSelect]}
+                                            style={[styles.menuItemList, isSelected && styles.menuItemSelected]}
                                             key={option.name}
                                         >
                                             <Feather
@@ -68,7 +69,7 @@ export default function ProtectedLayout() {
                                                 size={20}
                                                 color={isSelected ? "#fff": "#374151"}
                                                 style={styles.menuIcon}
-                                                ></Feather>
+                                            ></Feather>
                                             <Text style={[styles.menuText,isSelected && styles.menuTextSelected]}>{option.label}</Text>
 
                                         </TouchableOpacity>
@@ -77,6 +78,9 @@ export default function ProtectedLayout() {
                             </View>
                             <TouchableOpacity
                                 style={styles.logoutButton}
+                                onPress={async() => {
+                                    await clearSession();
+                                }}
                             >
                                 <Feather name="log-out" size={20} color="#EF4444"/>
                                 <Text style={styles.logoutText}>Log Out</Text>
@@ -142,7 +146,7 @@ const styles = StyleSheet.create({
         borderRadius:24,
         marginVertical:4,
     },
-    menuItemSelect: {
+    menuItemSelected: {
         backgroundColor: "#00B074",
     },
     menuIcon:{
